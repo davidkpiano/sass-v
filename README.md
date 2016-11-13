@@ -2,6 +2,9 @@
 
 An easier way to use CSS Custom Properties (a.k.a. CSS Variables) in SCSS!
 
+- [API - functions](#api---functions)
+- [API - mixins](#api---mixins)
+
 ## API - functions
 
 ### `v($name, $default: null)`
