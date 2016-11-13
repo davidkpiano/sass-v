@@ -1,6 +1,6 @@
 {
   "name": "sass-v",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "CSS Custom Properties + Sass",
   "main": "index.js",
   "scripts": {
