@@ -2,8 +2,16 @@
 
 An easier way to use CSS Custom Properties (a.k.a. CSS Variables) in SCSS!
 
+- [Installation](#installation)
 - [API - functions](#api---functions)
 - [API - mixins](#api---mixins)
+
+## Installation
+```bash
+npm install sass-v --save
+```
+
+Then, `@import 'path/to/sass-v/index.scss';`. If you're using [sass-loader](https://github.com/jtangelder/sass-loader/) with Webpack, `@import '~sass-v';` should work.
 
 ## API - functions
 
