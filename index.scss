@@ -1,0 +1,78 @@
+$v-operators: (
+  \+: unquote('+'),
+  \-: unquote('-'),
+  \*: unquote('*'),
+  \/: unquote('/'),
+);
+
+@function v($name, $default: null) {
+  @return if($default == null,
+    unquote('var(--#{$name})'),
+    unquote('var(--#{$name}, #{$default})')
+  );
+}
+
+@mixin v-set($prop, $name, $default: null) {
+  @if ($default) {
+    #{$prop}: $default;
+  }
+  #{$prop}: v($name, $default);
+}
+
+@mixin v-map($map, $current: null) {
+  @each $prop, $value in $map {
+    $name: if($current, $current + '-' + $prop, $prop);
+    @if (type-of($value) == 'map') {
+      @include v-map($value, $current: $name);
+    } @else {
+      #{'--' + $name}: $value;  
+    }
+  }
+}
+
+@mixin v($name, $value: null) {
+  @if (type-of($name) == 'map') {
+    @include v-map($name);
+  } @else {
+    #{'--' + $name}: $value;
+  }
+}
+
+@mixin v-supported {
+  @supports (--c: v) {
+    @content;
+  }
+}
+
+@mixin v-not-supported {
+  @supports not (--c: v) {
+    @content;
+  }
+}
+
+@function v-group($expr) {
+  $result: '';
+  
+  @each $item in $expr {
+    $operator: map-get($v-operators, $item);
+    $value: if($operator,
+      $operator,
+      if(type-of($item) == 'list', v-group($item), $item)
+    );
+    $result: $result + $value + ' ';
+  }
+  
+  @return unquote('(#{str-slice($result, 1, -2)})');
+}
+
+@function v-calc($expr) {
+  @return unquote('calc#{v-group($expr)}');
+}
+
+@function v-if($cond, $value, $default) {
+  @return v-group($cond \* $value \+ (1 \- $cond) \* $value);
+}
+
+@function v-if-not($cond, $value, $default) {
+  @return v-group((-1 \* $cond \+ 1) \* $value \+ $cond \* $value);
+}

@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/davidkpiano/sass-v/issues"
   },
-  "homepage": "https://github.com/davidkpiano/sass-v#readme"
+  "homepage": "https://github.com/davidkpiano/sass-v#readme",
+  "devDependencies": {
+    "sass-true": "~2.1.3"
+  }
 }
