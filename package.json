@@ -1,0 +1,29 @@
+{
+  "name": "sass-v",
+  "version": "0.0.1",
+  "description": "CSS Custom Properties + Sass",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidkpiano/sass-v.git"
+  },
+  "keywords": [
+    "sass",
+    "scss",
+    "css",
+    "css",
+    "variables",
+    "css",
+    "custom",
+    "properties"
+  ],
+  "author": "David <davidkpiano@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davidkpiano/sass-v/issues"
+  },
+  "homepage": "https://github.com/davidkpiano/sass-v#readme"
+}
