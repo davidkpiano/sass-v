@@ -13,6 +13,10 @@ npm install sass-v --save
 
 Then, `@import 'path/to/sass-v/index.scss';`. If you're using [sass-loader](https://github.com/jtangelder/sass-loader/) with Webpack, `@import '~sass-v';` should work.
 
+## Lazy Installation
+
+Just copy-paste all the code in `index.scss` (less than 80 lines) somewhere in your project. ¯\\\_(ツ)\_/¯
+
 ## API - functions
 
 ### `v($name, $default: null)`
