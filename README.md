@@ -175,7 +175,7 @@ Sets the CSS property to the specified CSS variable (`$name`), with an optional 
 // Result:
 .button {
   width: 5rem;
-  width: v(--foo, 5rem);
+  width: var(--foo, 5rem);
 }
 ```
 
