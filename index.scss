@@ -74,9 +74,9 @@ $v-operators: (
 }
 
 @function v-if($cond, $value, $default) {
-  @return v-group($cond \* $value \+ (1 \- $cond) \* $value);
+  @return v-group($cond \* $value \+ (1 \- $cond) \* $default);
 }
 
 @function v-if-not($cond, $value, $default) {
-  @return v-group((-1 \* $cond \+ 1) \* $value \+ $cond \* $value);
+  @return v-group((-1 \* $cond \+ 1) \* $value \+ $cond \* $default);
 }

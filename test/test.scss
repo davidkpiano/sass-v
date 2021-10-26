@@ -1,0 +1,171 @@
+@use "sass:string";
+@use 'true' as *;
+@use 'index.scss' as *;
+
+@include describe('Functions') {
+    @include describe('v($name, $default: null)') {
+        @include it('returns the specified CSS variable') {
+            $output: v(foo);
+            $expected: var(--foo);
+            @include assert-equal($output, $expected);
+        }
+        @include it('returns the specified CSS variable with a fallback') {
+            $output: v(bar, 2rem);
+            $expected: var(--bar, 2rem);
+            @include assert-equal($output, $expected);
+        }
+        @include it('accepts nested fallbacks') {
+            $output: v(button-font-size, v(font-size, 16px));
+            $expected: var(--button-font-size, var(--font-size, 16px));
+            @include assert-equal($output, $expected);
+        }
+    }
+
+    @include describe('v-calc($expression)') {
+        $foo: 3px;
+        @include it('correctly compiles a CSS calc function') {
+            $output: v-calc($foo \+ v(bar, 1rem));
+            $expected: string.unquote('calc(3px + var(--bar, 1rem))');
+            @include assert-equal($output, $expected);
+        }
+        @include it('works with grouped expressions') {
+            $output: v-calc($foo \+ (2 \* v(bar, 1rem)));
+            $expected: string.unquote('calc(3px + (2 * var(--bar, 1rem)))');
+            @include assert-equal($output, $expected);
+        }
+    }
+
+    @include describe('v-if($condition, $value, $default)') {
+        @include it('returns a calc function for a boolean-like variable') {
+            $output: v-calc(v-if(v(mobile), 100%, 50%));
+            $expected: string.unquote('calc((var(--mobile) * 100% + (1 - var(--mobile)) * 50%))');
+            @include assert-equal($output, $expected);
+        }
+    }
+
+    @include describe('v-if-not($condition, $value, $default)') {
+        @include it('returns the inverse of v-if()') {
+            $output: v-calc(v-if-not(v(mobile), 100%, 50%));
+            $expected: string.unquote('calc(((-1 * var(--mobile) + 1) * 100% + var(--mobile) * 50%))');
+            @include assert-equal($output, $expected);
+        }
+    }
+}
+
+@include describe('Mixins') {
+    @include describe('v($name, $value)') {
+        @include it('sets a CSS variable to the specified value') {
+            @include assert {
+                @include output {
+                    :root {
+                        @include v(font-size, 1rem);
+                    }
+                }
+                @include expect {
+                    :root {
+                        --font-size: 1rem;
+                    }
+                }
+            }
+        }
+        @include it('sets a CSS variable with nested fallbacks') {
+            @include assert {
+                @include output {
+                    :root {
+                        @include v(spacing, v(font-size, 16px));
+                    }
+                }
+                @include expect {
+                    :root {
+                        --spacing: var(--font-size, 16px);
+                    }
+                }
+            }
+        }
+    }
+
+    @include describe('v($map)') {
+        @include it('sets CSS variables based on a map of values') {
+            @include assert {
+                @include output {
+                    :root {
+                        @include v((
+                        font-size: 1rem,
+                        color: (
+                        primary: red,
+                        secondary: blue,
+                        ),
+                        ));
+                    }
+                }
+                @include expect {
+                    :root {
+                        --font-size: 1rem;
+                        --color-primary: red;
+                        --color-secondary: blue;
+                    }
+                }
+            }
+        }
+    }
+
+    @include describe('v-set($property, $name, $default: null)') {
+        @include it('sets the CSS property to a CSS variable with fallback') {
+            @include assert {
+                @include output {
+                    .button {
+                        @include v-set(width, foo, 5rem);
+                    }
+                }
+                @include expect {
+                    .button {
+                        width: 5rem;
+                        width: var(--foo, 5rem);
+                    }
+                }
+            }
+        }
+    }
+
+    @include describe('v-supported') {
+        @include it('adds a @supports rule for CSS properties') {
+            @include assert {
+                @include output {
+                    @include v-supported {
+                        :root {
+                            --foo: 16px;
+                        }
+                    }
+                }
+                @include expect {
+                    @supports (--c: v) {
+                        :root {
+                            --foo: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include describe('v-not-supported') {
+        @include it('sets a CSS variable to the specified value') {
+            @include assert {
+                @include output {
+                    @include v-not-supported {
+                        :root {
+                            font-size: 16px;
+                        }
+                    }
+                }
+                @include expect {
+                    @supports not (--c: v) {
+                        :root {
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
