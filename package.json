@@ -2,11 +2,14 @@
   "name": "sass-v",
   "version": "0.1.0",
   "description": "CSS Custom Properties + Sass",
-  "main": "index.js",
+  "main": "index.scss",
   "scripts": {
     "test": "npx mocha",
     "prepublishOnly": "npm test"
   },
+  "files": [
+    "index.scss"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/davidkpiano/sass-v.git"
