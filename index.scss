@@ -1,14 +1,18 @@
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+
 $v-operators: (
-  \+: unquote('+'),
-  \-: unquote('-'),
-  \*: unquote('*'),
-  \/: unquote('/'),
+  \+: string.unquote('+'),
+  \-: string.unquote('-'),
+  \*: string.unquote('*'),
+  \/: string.unquote('/'),
 );
 
 @function v($name, $default: null) {
   @return if($default == null,
-    unquote('var(--#{$name})'),
-    unquote('var(--#{$name}, #{$default})')
+    string.unquote('var(--#{$name})'),
+    string.unquote('var(--#{$name}, #{$default})')
   );
 }
 
@@ -22,7 +26,7 @@ $v-operators: (
 @mixin v-map($map, $current: null) {
   @each $prop, $value in $map {
     $name: if($current, $current + '-' + $prop, $prop);
-    @if (type-of($value) == 'map') {
+    @if (meta.type-of($value) == 'map') {
       @include v-map($value, $current: $name);
     } @else {
       #{'--' + $name}: $value;  
@@ -31,7 +35,7 @@ $v-operators: (
 }
 
 @mixin v($name, $value: null) {
-  @if (type-of($name) == 'map') {
+  @if (meta.type-of($name) == 'map') {
     @include v-map($name);
   } @else {
     #{'--' + $name}: $value;
@@ -54,19 +58,19 @@ $v-operators: (
   $result: '';
   
   @each $item in $expr {
-    $operator: map-get($v-operators, $item);
+    $operator: map.get($v-operators, $item);
     $value: if($operator,
       $operator,
-      if(type-of($item) == 'list', v-group($item), $item)
+      if(meta.type-of($item) == 'list', v-group($item), $item)
     );
     $result: $result + $value + ' ';
   }
   
-  @return unquote('(#{str-slice($result, 1, -2)})');
+  @return string.unquote('(#{string.slice($result, 1, -2)})');
 }
 
 @function v-calc($expr) {
-  @return unquote('calc#{v-group($expr)}');
+  @return string.unquote('calc#{v-group($expr)}');
 }
 
 @function v-if($cond, $value, $default) {
