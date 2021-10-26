@@ -4,7 +4,8 @@
   "description": "CSS Custom Properties + Sass",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx mocha",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,8 @@
   },
   "homepage": "https://github.com/davidkpiano/sass-v#readme",
   "devDependencies": {
-    "sass-true": "~2.1.3"
+    "mocha": "^9.1.3",
+    "sass": "^1.43.3",
+    "sass-true": "^6.0.1"
   }
 }
